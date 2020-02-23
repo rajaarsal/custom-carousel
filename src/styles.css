@@ -10,6 +10,8 @@
 }
 .carouselContainer {
   text-align: center;
+  background: #e9eee6;
+  padding: 20px 0;
 }
 
 .carouselSlides {
@@ -17,12 +19,21 @@
   overflow: scroll;
   width: 100%;
   margin: auto;
+  padding: 10px 0;
+  background: #fff;
+  margin-bottom: 10px;
 }
 
 .carouselSlides .carouselSlides_item {
   flex: 0 0 100%;
+  display: flex;
+  flex-direction: column;
   background: #fff;
   white-space: normal;
+}
+
+.carouselSlides .carouselSlides_item--image {
+  height: 100%;
 }
 
 .carouselSlides .carouselSlides_item--image img {
@@ -70,6 +81,12 @@
   right: 0;
 }
 
+.carouselWrapper .actionButton:disabled {
+  background-color: grey;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 @media screen and (min-width: 768px) {
   .carouselSlides .carouselSlides_item {
     flex: 0 0 auto;
@@ -88,6 +105,11 @@
     width: auto;
     height: auto;
     cursor: pointer;
+  }
+
+  .carouselSlides .carouselSlides_item--image {
+    height: 100%;
+    max-height: 160px;
   }
 
   .carouselWrapper .actionButton.prev {
