@@ -109,7 +109,6 @@
 
   .carouselSlides .carouselSlides_item--image {
     height: 100%;
-    max-height: 160px;
   }
 
   .carouselWrapper .actionButton.prev {

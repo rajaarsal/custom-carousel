@@ -7,11 +7,16 @@ const Carousel = ({ hits, slidesToShow }) => {
   const [nextButtonDisable, setNextButtonDisable] = useState(false);
   const [prevButtonDisable, setPreButtonDisable] = useState(true);
   const [clickCount, setClickCount] = useState(0);
+  const [responsiveCarousel, setResponsiveCarousel] = useState(0);
 
   const nextSlideHandler = () => {
     setPreButtonDisable(false);
     setClickCount(count => count + 1);
-    if (clickCount === hits.length - slidesToShow - 1) {
+    if (responsiveCarousel <= 768) {
+      if (clickCount === hits.length - 2) {
+        setNextButtonDisable(true);
+      }
+    } else if (clickCount === hits.length - slidesToShow - 1) {
       setNextButtonDisable(true);
     }
   };
@@ -26,16 +31,46 @@ const Carousel = ({ hits, slidesToShow }) => {
 
   useEffect(() => {
     setSlidesContainerWidth(slidesContainer.current.clientWidth);
-    setSlideItemWidth(slidesContainerWidth / slidesToShow);
-  }, [slidesContainerWidth, slidesToShow]);
+    if (responsiveCarousel > 768) {
+      setSlideItemWidth(slidesContainerWidth / slidesToShow);
+    } else {
+      setSlideItemWidth(slidesContainerWidth);
+    }
+  }, [slidesContainerWidth, slidesToShow, responsiveCarousel]);
 
   useEffect(() => {
     const childNodes = slidesContainer.current.childNodes;
-    childNodes.forEach(child => {
-      child.style.transform = `translateX(-${clickCount * slideItemWidth}px)`;
-      child.style.transition = "all 300ms";
+    if (responsiveCarousel <= 768) {
+      childNodes.forEach(child => {
+        child.style.transform = `translateX(-${clickCount * slideItemWidth}px)`;
+        child.style.transition = "all 300ms";
+      });
+    } else {
+      childNodes.forEach(child => {
+        child.style.transform = `translateX(-${clickCount * slideItemWidth}px)`;
+        child.style.transition = "all 300ms";
+      });
+    }
+  }, [clickCount, slideItemWidth, responsiveCarousel]);
+
+  useEffect(() => {
+    setResponsiveCarousel(window.innerWidth);
+    window.addEventListener("resize", function() {
+      const childNodes = slidesContainer.current.childNodes;
+      childNodes.forEach(child => {
+        child.style.transform = `translateX(0px)`;
+        child.style.transition = "all 300ms";
+      });
+      setPreButtonDisable(true);
+      setNextButtonDisable(false);
+      setClickCount(0);
+      setResponsiveCarousel(window.innerWidth);
     });
-  }, [clickCount, slideItemWidth]);
+    return () => {
+      window.removeEventListener("resize", function() {});
+    };
+  }, [responsiveCarousel]);
+
   return (
     <div className="carouselContainer">
       <h1>Carousel</h1>
